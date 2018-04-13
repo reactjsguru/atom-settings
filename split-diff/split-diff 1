@@ -1,0 +1,73 @@
+import path from 'path';P
+import https from 'https';
+import express from 'express';
+import exphbs from 'express-handlebars';
+import favicon from 'serve-favicon';
+import cacheResponseDirective from 'express-cache-response-directive';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
+import compression from 'compression';
+import sprintf from 'sprintf-js';
+import { Metrics, monitoring } from './monitoring';
+import requestContext from './middleware/request-context';
+import config from '../../config/config';
+import buildInfo from '../../config/appBuildInfo';
+import logger from './support/logger';
+import expediaRootCas from './support/expedia-root-cas';
+
+const app = express();
+const metrics = Metrics.getDefault();
+const assetsPath = sprintf.sprintf(config.assetsPath, buildInfo.version);
+
+app.engine('handlebars', exphbs());
+
+// CONFIGURATIONS
+const env = config.environmentName.toLowerCase() === 'development' ? 'development' : 'production';
+
+app.set('env', env);
+app.set('port', config.port);
+app.set('https', config.https);
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'handlebars');
+app.set('etag', false);
+app.set('x-powered-by', false);
+https.globalAgent.options.ca = expediaRootCas;
+
+// MIDDLEWARE
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(cacheResponseDirective());
+app.use(compression());
+app.use(favicon(`${__dirname}/../../public/favicon.ico`));
+app.use(express.static(path.join(__dirname, '../../public')));
+app.use('/cart', express.static(path.join(__dirname, '../../dist')));
+app.use('/cart', express.static(path.join(__dirname, '../../node_modules/uitk-global/dist/script')));
+app.use(logger.REQUEST_LOGGER);
+app.use(monitoring());
+app.use(requestContext());
+
+// ROUTE HANDLING
+import * as routes from './routes';
+Object.keys(routes).filter(route => route !== 'default').forEach(route => routes[route](app));
+
+// ERROR-HANDLING
+app.use(logger.ERROR_LOGGER);
+app.use((req, res, next) => {
+    const err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
+
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+    res.status(err.status || 500);
+    metrics.meter(`routes.index.${err.status}`).mark();
+    res.render('error', {
+        message: err.message,
+        error: app.get('env') === 'production' ? {} : err,
+        assetsPath: assetsPath,
+    });
+});
+
+module.exports = app;

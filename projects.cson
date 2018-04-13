@@ -1,0 +1,9 @@
+[
+  {
+    title: "Shopping Cart Ui"
+    paths: [
+      "/Users/mastevens/dev/shopping-cart-ui"
+    ]
+    devMode: true
+  }
+]

@@ -1,0 +1,68 @@
+"*":
+  "atom-ide-ui":
+    use: {}
+  "autocomplete-paths":
+    maxFileCount: 10000
+  core:
+    disabledPackages: [
+      "react"
+      "jslint"
+      "autocomplete-snippets"
+      "linter"
+    ]
+    ignoredNames: [
+      ".git"
+      ".hg"
+      ".svn"
+      ".DS_Store"
+      "._*"
+      "Thumbs.db"
+      "desktop.ini"
+      "node_modules"
+    ]
+    themes: [
+      "one-dark-ui"
+      "atom-dark-syntax"
+    ]
+  editor:
+    fontSize: 15
+    showIndentGuide: true
+    tabLength: 4
+  "exception-reporting":
+    userId: "d19e0100-2614-4f28-a7d3-dd22356ba244"
+  "git-blame":
+    columnWidth: 356
+  "linter-ui-default": {}
+  minimap:
+    plugins:
+      cursorline: true
+      cursorlineDecorationsZIndex: 0
+  "mocha-test-runner":
+    options: "--require test/helpers/test-setup.js --timeout 20000 --compilers js:babel-core/register --require babel-polyfill"
+  "prettier-atom":
+    formatOnSaveOptions: {}
+    prettierOptions:
+      singleQuote: true
+      tabWidth: 4
+    useEslint: true
+  "split-diff":
+    diffWords: true
+    ignoreWhitespace: true
+    leftEditorColor: "red"
+    rightEditorColor: "green"
+    scrollSyncType: "Vertical + Horizontal"
+".attribute-values.js.jsx.source":
+  editor:
+    tabLength: 4
+".js.jsx.react.source":
+  editor:
+    tabLength: 4
+".js.jsx.source":
+  editor:
+    tabLength: 4
+".js.source.subtlegradient":
+  editor:
+    tabLength: 4
+".json.source":
+  editor:
+    tabLength: 4

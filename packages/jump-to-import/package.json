@@ -1,0 +1,761 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "/private/var/folders/dx/6_tbggk97hv69kkzcnc76gtdqmsb9d/T/d-11836-15915-1fgd0jh.pfhazfflxr/package.tgz",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "/private/var/folders/dx/6_tbggk97hv69kkzcnc76gtdqmsb9d/T/d-11836-15915-1fgd0jh.pfhazfflxr/package.tgz",
+        "spec": "/private/var/folders/dx/6_tbggk97hv69kkzcnc76gtdqmsb9d/T/d-11836-15915-1fgd0jh.pfhazfflxr/package.tgz",
+        "type": "local"
+      },
+      "/private/var/folders/dx/6_tbggk97hv69kkzcnc76gtdqmsb9d/T/apm-install-dir-11836-15915-1ban2vc.s61xgycik9"
+    ]
+  ],
+  "_from": "../d-11836-15915-1fgd0jh.pfhazfflxr/package.tgz",
+  "_id": "jump-to-import@3.6.5",
+  "_inCache": true,
+  "_location": "/jump-to-import",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "/private/var/folders/dx/6_tbggk97hv69kkzcnc76gtdqmsb9d/T/d-11836-15915-1fgd0jh.pfhazfflxr/package.tgz",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "/private/var/folders/dx/6_tbggk97hv69kkzcnc76gtdqmsb9d/T/d-11836-15915-1fgd0jh.pfhazfflxr/package.tgz",
+    "spec": "/private/var/folders/dx/6_tbggk97hv69kkzcnc76gtdqmsb9d/T/d-11836-15915-1fgd0jh.pfhazfflxr/package.tgz",
+    "type": "local"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "file:../d-11836-15915-1fgd0jh.pfhazfflxr/package.tgz",
+  "_shasum": "b7022ccae1aefd984ddf5f677ed44491b12ad72b",
+  "_shrinkwrap": null,
+  "_spec": "/private/var/folders/dx/6_tbggk97hv69kkzcnc76gtdqmsb9d/T/d-11836-15915-1fgd0jh.pfhazfflxr/package.tgz",
+  "_where": "/private/var/folders/dx/6_tbggk97hv69kkzcnc76gtdqmsb9d/T/apm-install-dir-11836-15915-1ban2vc.s61xgycik9",
+  "bugs": {
+    "url": "https://github.com/alexheyd/atom-jump-to-import/issues"
+  },
+  "dependencies": {
+    "atom-package-deps": "^4.6.0",
+    "deepmerge": "^1.3.2",
+    "find-babel-config": "^1.0.1",
+    "symbols-view": "git+https://github.com/atom/symbols-view.git"
+  },
+  "description": "Jump to ES6 import/require/bower/npm modules, including Ember.Service and Ember.Component template files. With hyperclick support and project-specific configs.",
+  "devDependencies": {},
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "homepage": "https://github.com/alexheyd/atom-jump-to-import#readme",
+  "keywords": [],
+  "license": "MIT",
+  "main": "./lib/jump-to-import",
+  "name": "jump-to-import",
+  "optionalDependencies": {},
+  "package-deps": [
+    "hyperclick"
+  ],
+  "providedServices": {
+    "hyperclick.provider": {
+      "versions": {
+        "0.0.0": "getProvider"
+      }
+    }
+  },
+  "readme": "# jump-to-import package\n\nContributions and Pull Requests are welcome.\n\n* [Installation](#installation)\n* [Bugs](#bugs)\n* [Description](#description)\n* [Requirements](#requirements)\n* [Features](#features)\n* [Usage](#usage)\n\t* [Without `hyperclick`](#without-hyperclick)\n\t* [With `hyperclick`](#with-hyperclick)\n* [Setup](#setup)\n\t* [Package Settings](#package-settings)\n\t\t* [Aliases](#aliases)\n\t\t* [Project Name](#project-name)\n\t\t* [File Extensions](#file-extensions)\n\t\t* [Ember.Service Aliases](#emberservice-aliases)\n\t* [Project-specific settings via `.jump-to-import`](#project-specific-settings-via-jump-to-import)\n\t* [.babelrc](#babelrc)\n\t* [Settings & Aliases Priority](#settings-aliases-priority)\n* [Example](#example)\n\n## Installation\n```bash\napm install jump-to-import\n```\n\n## Bugs\n**NOTE:** please do the following before submitting an Issue\n- enable debug logging in package settings (check box next to `Enable Debug`)\n- in Atom's devtools (<kbd>CMD+ALT+I</kbd>), you'll see a log named `[jump-to-import] Debug Report: Object`\n- click the `down arrow` next to `Object` to expand it, then copy and paste the log into a GitHub Issue\n\n**Privacy Note:** please be aware that this will submit the following information to me:\n- what string you attempted to jump to\n- your path aliases\n- user options for this package\n- file paths that couldn't be found\n- whether the file was a Javascript or HTMLBars file\n\n## Description\nQuickly jump to an ES6 module file from its import path or variable. Also supports jumping to `Ember.Service` definitions (with alias support), as well as `Ember.Component` template files from an `HTMLBars` file.\n\nSupport for project-specific settings/aliases via `.jump-to-import`, additional aliases via `.babelrc` and/or `webpack.config.js`\n\n## Requirements\n- `package.json` required at root of project\n    - used to figure out the project name to use when converting magic paths to the real file path\n\n## Features\n- Commands:\n\t- `jump-to-import:go-to-module` (default keybind: <kbd>CTRL+ALT+E</kbd>)\n\t- `jump-to-import:create-project-config`\n\t- `jump-to-import:debug-log`\n- Jump to:\n    - imported file from path, variable name, or method name\n        - supports `import` and `require` syntax\n        - supports path aliasing\n        - supports NPM and Bower modules (including `npm:foo` syntax for `Browserify`)\n        - multi-line, destructured `import` statements\n    - `Ember.Service` files, with or without pod structure\n        - supports `Ember.Service` name aliasing\n    - `Ember.Component` template files, with or without pod structure\n        - from an `.hbs` file, component names can jump to their template file\n- `hyperclick` support:\n    - you can now click on variable names, import paths or methods\n    - installing `hyperclick` is a requirement if you plan to use this functionality\n    - you may need to configure `hyperclick` to use an appropriate hotkey\n- `babel-plugin-module-resolver` support:\n    - loads path overrides from project's `.babelrc`\n- **NEW:** very basic Webpack Module Alias support\n    - this *only* supports the `resolve.alias` section of the `webpack.config.js`\n    - **NOTE:** any modification to `webpack.config.js` requires reloading Atom for now\n- Multiple project root folders\n- Configurable settings:\n    - Project-specific settings via `.jump-to-import` file\n    - Custom path aliases\n    - `Ember.Service` name aliasing\n    - Ability to disable custom path overrides, `.babelrc` overrides, `hyperclick` support\n    - Prioritized list of file extensions to check (defaults to `js` and `jsx`)\n\n## Usage\n\n### Without `hyperclick`\nPress <kbd>CTRL+ALT+E</kbd> with the cursor either on:\n- an ES6 `import`/`require` path\n- the imported namespace/variable\n- a method on the imported namespace\n- an `Ember.Service` dependency injection (i.e `foo: Ember.inject.service()`)\n\nto open that file and jump to the relevant method, if applicable.\n\n### With `hyperclick`\nHold your `hyperclick` toggle key and click on any applicable string to jump to that module.\n\n## Setup\nThe package looks for configuration options and path aliases in two places:\n- package settings\n- `.jump-to-import` files (project settings)\n- `.babelrc` files (babel aliases)\n\n### Package Settings\nThese are simply accessed in Atom's `Settings > Packages > Jump To Import`. These are basically global settings that will apply to any project.\n\n#### Aliases\nYou can define your own path aliases in Settings.\n\nDefault aliases are:\n- `$PROJECT:app`\n- `$PROJECT/config:config`\n\nWith the above default settings (for Ember projects) we would get the following behavior:\n- `PROJECT_NAME/components/foo` -> `app/components/foo.js`\n- `PROJECT_NAME/config/environment` -> `config/environment.js`\n\n`PROJECT_NAME` in the path needs to match the project name defined in your `package.json` file in the root directory.\n\n#### Project Name\nThe package will look for a `package.json` file in every root directory of the project to determine project names.\n\n#### File Extensions\nYou can also define a list of file extensions to look for.\n\n#### Ember.Service Aliases\nYou can define `Ember.Service` name aliases, in case the injected variable name and registered service name differ.\n\n### Project-specific settings via `.jump-to-import`\nOptionally, you can add a `.jump-to-import` file in any root folder of your project which will take precedence over the package settings. These allow for project-specific settings and aliases.\n\nYou can trigger the `jump-to-import:create-project-config` through the `Command Palette` to generate a default config.\n\n**NOTE:** Project settings only apply to the root directory they belong to.\n\nHere's a sample config, using default settings:\n\n```javascript\n{\n  \"usePendingPane\": true,\n  \"openInSeparatePane\": true,\n  \"panePosition\": \"right\",\n  \"useEmberPods\": true,\n  \"fileExtensions\": [\n    \"js\",\n    \"jsx\"\n  ],\n  \"pathOverrides\": [\n    \"$PROJECT:app\",\n    \"$PROJECT/config:config\",\n    \"$PROJECT/tests:tests\"\n  ],\n  \"serviceOverrides\": [\n    \"fastboot:boot\"\n  ],\n  \"disablePathOverrides\": false,\n  \"disableBabelRc\": false,\n  \"disableHyperclickSupport\": false\n}\n```\n\n### .babelrc\nOptionally, you can use path aliases defined in `.babelrc`. A sample file looks like:\n\n```javascript\n{\n  \"plugins\": [\n      [\"module-resolver\", {\n        \"root\": [\"./src\"],\n        \"alias\": {\n          \"utils\": \"./utils\"\n        }\n      }]\n    ]\n}\n```\n\nWith the above `.babelrc` file, a path of `utils/test` will resolve to `./src/utils/test.js`\n\n### Settings & Aliases Priority\nProject settings and aliases defined in `.jump-to-import` will always take priority. Next, `.babelrc` aliases take precedence over aliases defined in Package Settings.\n\nRemember, `.jump-to-import` > `.babelrc` > `Package Settings`\n\n## Example\nWith the following `import` line:\n\n```javascript\n// assuming the project's name is defined as `my-project` in `package.json`\n// with cursor on, or selecting, `FooMixin` or the path, will open project-root/app/mixins/foo.js\nimport FooMixin from 'my-project/mixins/foo'\n\n// with cursor on, or selecting, bar, will open project-root/app/mixins/foo.js and jump to the bar() method\nFooMixin.bar();\n```\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexheyd/atom-jump-to-import.git"
+  },
+  "version": "3.6.5",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [
+      {
+        "name": "async",
+        "version": "0.2.10",
+        "path": "node_modules/async/lib/async.js"
+      },
+      {
+        "name": "atom-package-deps",
+        "version": "4.6.2",
+        "path": "node_modules/atom-package-deps/lib/index.js"
+      },
+      {
+        "name": "atom-package-path",
+        "version": "1.1.0",
+        "path": "node_modules/atom-package-path/lib/index.js"
+      },
+      {
+        "name": "atom-select-list",
+        "version": "0.7.1",
+        "path": "node_modules/atom-select-list/src/select-list-view.js"
+      },
+      {
+        "name": "balanced-match",
+        "version": "1.0.0",
+        "path": "node_modules/balanced-match/index.js"
+      },
+      {
+        "name": "brace-expansion",
+        "version": "1.1.11",
+        "path": "node_modules/brace-expansion/index.js"
+      },
+      {
+        "name": "concat-map",
+        "version": "0.0.1",
+        "path": "node_modules/concat-map/index.js"
+      },
+      {
+        "name": "ctags",
+        "version": "3.0.0",
+        "path": "node_modules/ctags/lib/ctags.js"
+      },
+      {
+        "name": "deepmerge",
+        "version": "1.5.2",
+        "path": "node_modules/deepmerge/dist/umd.js"
+      },
+      {
+        "name": "duplexer",
+        "version": "0.1.1",
+        "path": "node_modules/duplexer/index.js"
+      },
+      {
+        "name": "etch",
+        "version": "0.12.8",
+        "path": "node_modules/etch/lib/index.js"
+      },
+      {
+        "name": "event-stream",
+        "version": "3.1.7",
+        "path": "node_modules/event-stream/index.js"
+      },
+      {
+        "name": "find-babel-config",
+        "version": "1.1.0",
+        "path": "node_modules/find-babel-config/lib/index.js"
+      },
+      {
+        "name": "from",
+        "version": "0.1.7",
+        "path": "node_modules/from/index.js"
+      },
+      {
+        "name": "fs-plus",
+        "version": "3.0.2",
+        "path": "node_modules/fs-plus/lib/fs-plus.js"
+      },
+      {
+        "name": "async",
+        "version": "1.5.2",
+        "path": "node_modules/fs-plus/node_modules/async/lib/async.js"
+      },
+      {
+        "name": "fs.realpath",
+        "version": "1.0.0",
+        "path": "node_modules/fs.realpath/index.js"
+      },
+      {
+        "name": "fuzzaldrin",
+        "version": "2.1.0",
+        "path": "node_modules/fuzzaldrin/lib/fuzzaldrin.js"
+      },
+      {
+        "name": "glob",
+        "version": "7.1.2",
+        "path": "node_modules/glob/glob.js"
+      },
+      {
+        "name": "humanize-plus",
+        "version": "1.8.2",
+        "path": "node_modules/humanize-plus/dist/humanize.js"
+      },
+      {
+        "name": "inflight",
+        "version": "1.0.6",
+        "path": "node_modules/inflight/inflight.js"
+      },
+      {
+        "name": "inherits",
+        "version": "2.0.3",
+        "path": "node_modules/inherits/inherits.js"
+      },
+      {
+        "name": "is-utf8",
+        "version": "0.2.1",
+        "path": "node_modules/is-utf8/is-utf8.js"
+      },
+      {
+        "name": "json5",
+        "version": "0.5.1",
+        "path": "node_modules/json5/lib/json5.js"
+      },
+      {
+        "name": "map-stream",
+        "version": "0.1.0",
+        "path": "node_modules/map-stream/index.js"
+      },
+      {
+        "name": "minimatch",
+        "version": "3.0.4",
+        "path": "node_modules/minimatch/minimatch.js"
+      },
+      {
+        "name": "minimist",
+        "version": "0.0.8",
+        "path": "node_modules/minimist/index.js"
+      },
+      {
+        "name": "mkdirp",
+        "version": "0.5.1",
+        "path": "node_modules/mkdirp/index.js"
+      },
+      {
+        "name": "nan",
+        "version": "2.10.0",
+        "path": "node_modules/nan/include_dirs.js"
+      },
+      {
+        "name": "once",
+        "version": "1.4.0",
+        "path": "node_modules/once/once.js"
+      },
+      {
+        "name": "os-tmpdir",
+        "version": "1.0.2",
+        "path": "node_modules/os-tmpdir/index.js"
+      },
+      {
+        "name": "path-exists",
+        "version": "3.0.0",
+        "path": "node_modules/path-exists/index.js"
+      },
+      {
+        "name": "path-is-absolute",
+        "version": "1.0.1",
+        "path": "node_modules/path-is-absolute/index.js"
+      },
+      {
+        "name": "pause-stream",
+        "version": "0.0.11",
+        "path": "node_modules/pause-stream/index.js"
+      },
+      {
+        "name": "rimraf",
+        "version": "2.6.2",
+        "path": "node_modules/rimraf/rimraf.js"
+      },
+      {
+        "name": "sb-callsite",
+        "version": "1.1.2",
+        "path": "node_modules/sb-callsite/lib/main.js"
+      },
+      {
+        "name": "sb-fs",
+        "version": "3.0.0",
+        "path": "node_modules/sb-fs/lib/index.js"
+      },
+      {
+        "name": "sb-promisify",
+        "version": "2.0.2",
+        "path": "node_modules/sb-promisify/lib/index.js"
+      },
+      {
+        "name": "semver",
+        "version": "5.5.0",
+        "path": "node_modules/semver/semver.js"
+      },
+      {
+        "name": "split",
+        "version": "0.2.10",
+        "path": "node_modules/split/index.js"
+      },
+      {
+        "name": "stream-combiner",
+        "version": "0.0.4",
+        "path": "node_modules/stream-combiner/index.js"
+      },
+      {
+        "name": "strip-bom-buf",
+        "version": "1.0.0",
+        "path": "node_modules/strip-bom-buf/index.js"
+      },
+      {
+        "name": "symbols-view",
+        "version": "0.118.2",
+        "path": "node_modules/symbols-view/lib/main.js"
+      },
+      {
+        "name": "temp",
+        "version": "0.8.3",
+        "path": "node_modules/temp/lib/temp.js"
+      },
+      {
+        "name": "rimraf",
+        "version": "2.2.8",
+        "path": "node_modules/temp/node_modules/rimraf/rimraf.js"
+      },
+      {
+        "name": "through",
+        "version": "2.3.8",
+        "path": "node_modules/through/index.js"
+      },
+      {
+        "name": "underscore",
+        "version": "1.6.0",
+        "path": "node_modules/underscore/underscore.js"
+      },
+      {
+        "name": "underscore-plus",
+        "version": "1.6.6",
+        "path": "node_modules/underscore-plus/lib/underscore-plus.js"
+      },
+      {
+        "name": "wrappy",
+        "version": "1.0.2",
+        "path": "node_modules/wrappy/wrappy.js"
+      }
+    ],
+    "extensions": {
+      ".js": [
+        "lib/default-config.js",
+        "lib/jump-to-import.js",
+        "lib/utils/atom.js",
+        "lib/utils/config.js",
+        "lib/utils/filepath.js",
+        "lib/utils/general.js",
+        "lib/utils/logger.js",
+        "node_modules/async/lib/async.js",
+        "node_modules/atom-package-deps/lib/helpers.js",
+        "node_modules/atom-package-deps/lib/index.js",
+        "node_modules/atom-package-deps/lib/types.js",
+        "node_modules/atom-package-deps/lib/view.js",
+        "node_modules/atom-package-path/lib/index.js",
+        "node_modules/atom-select-list/src/select-list-view.js",
+        "node_modules/balanced-match/index.js",
+        "node_modules/brace-expansion/index.js",
+        "node_modules/concat-map/example/map.js",
+        "node_modules/concat-map/index.js",
+        "node_modules/ctags/lib/ctags.js",
+        "node_modules/deepmerge/dist/cjs.js",
+        "node_modules/deepmerge/dist/es.js",
+        "node_modules/deepmerge/dist/umd.js",
+        "node_modules/deepmerge/index.js",
+        "node_modules/deepmerge/rollup.config.js",
+        "node_modules/duplexer/index.js",
+        "node_modules/etch/dist/component-helpers.js",
+        "node_modules/etch/dist/default-scheduler.js",
+        "node_modules/etch/dist/dom.js",
+        "node_modules/etch/dist/event-listener-props.js",
+        "node_modules/etch/dist/index.js",
+        "node_modules/etch/dist/patch.js",
+        "node_modules/etch/dist/render.js",
+        "node_modules/etch/dist/scheduler-assignment.js",
+        "node_modules/etch/dist/svg-attribute-translations.js",
+        "node_modules/etch/dist/svg-tags.js",
+        "node_modules/etch/dist/update-props.js",
+        "node_modules/etch/lib/component-helpers.js",
+        "node_modules/etch/lib/default-scheduler.js",
+        "node_modules/etch/lib/dom.js",
+        "node_modules/etch/lib/event-listener-props.js",
+        "node_modules/etch/lib/index.js",
+        "node_modules/etch/lib/patch.js",
+        "node_modules/etch/lib/render.js",
+        "node_modules/etch/lib/scheduler-assignment.js",
+        "node_modules/etch/lib/svg-attribute-translations.js",
+        "node_modules/etch/lib/svg-tags.js",
+        "node_modules/etch/lib/update-props.js",
+        "node_modules/event-stream/examples/pretty.js",
+        "node_modules/event-stream/index.js",
+        "node_modules/find-babel-config/lib/index.js",
+        "node_modules/from/index.js",
+        "node_modules/fs-plus/lib/fs-plus.js",
+        "node_modules/fs-plus/node_modules/async/dist/async.js",
+        "node_modules/fs-plus/node_modules/async/dist/async.min.js",
+        "node_modules/fs-plus/node_modules/async/lib/async.js",
+        "node_modules/fs.realpath/index.js",
+        "node_modules/fs.realpath/old.js",
+        "node_modules/fuzzaldrin/lib/filter.js",
+        "node_modules/fuzzaldrin/lib/fuzzaldrin.js",
+        "node_modules/fuzzaldrin/lib/matcher.js",
+        "node_modules/fuzzaldrin/lib/scorer.js",
+        "node_modules/glob/common.js",
+        "node_modules/glob/glob.js",
+        "node_modules/glob/sync.js",
+        "node_modules/humanize-plus/__tests__/humanize.spec.js",
+        "node_modules/humanize-plus/__tests__/runner.js",
+        "node_modules/humanize-plus/dist/humanize.js",
+        "node_modules/humanize-plus/dist/humanize.min.js",
+        "node_modules/humanize-plus/src/humanize.js",
+        "node_modules/inflight/inflight.js",
+        "node_modules/inherits/inherits.js",
+        "node_modules/inherits/inherits_browser.js",
+        "node_modules/is-utf8/is-utf8.js",
+        "node_modules/json5/lib/cli.js",
+        "node_modules/json5/lib/json5.js",
+        "node_modules/json5/lib/require.js",
+        "node_modules/map-stream/examples/pretty.js",
+        "node_modules/map-stream/index.js",
+        "node_modules/minimatch/minimatch.js",
+        "node_modules/minimist/example/parse.js",
+        "node_modules/minimist/index.js",
+        "node_modules/mkdirp/bin/cmd.js",
+        "node_modules/mkdirp/examples/pow.js",
+        "node_modules/mkdirp/index.js",
+        "node_modules/nan/include_dirs.js",
+        "node_modules/nan/tools/1to2.js",
+        "node_modules/once/once.js",
+        "node_modules/os-tmpdir/index.js",
+        "node_modules/path-exists/index.js",
+        "node_modules/path-is-absolute/index.js",
+        "node_modules/pause-stream/index.js",
+        "node_modules/rimraf/bin.js",
+        "node_modules/rimraf/rimraf.js",
+        "node_modules/sb-callsite/lib/main.js",
+        "node_modules/sb-fs/lib/index.js",
+        "node_modules/sb-promisify/lib/index.js",
+        "node_modules/semver/semver.js",
+        "node_modules/split/examples/pretty.js",
+        "node_modules/split/index.js",
+        "node_modules/stream-combiner/index.js",
+        "node_modules/strip-bom-buf/index.js",
+        "node_modules/symbols-view/.eslintrc.js",
+        "node_modules/symbols-view/lib/file-view.js",
+        "node_modules/symbols-view/lib/get-tags-file.js",
+        "node_modules/symbols-view/lib/go-back-view.js",
+        "node_modules/symbols-view/lib/go-to-view.js",
+        "node_modules/symbols-view/lib/load-tags-handler.js",
+        "node_modules/symbols-view/lib/main.js",
+        "node_modules/symbols-view/lib/project-view.js",
+        "node_modules/symbols-view/lib/symbols-view.js",
+        "node_modules/symbols-view/lib/tag-generator.js",
+        "node_modules/symbols-view/lib/tag-reader.js",
+        "node_modules/temp/examples/grepcount.js",
+        "node_modules/temp/examples/pdfcreator.js",
+        "node_modules/temp/lib/temp.js",
+        "node_modules/temp/no_cleanup.js",
+        "node_modules/temp/no_cleanup_on_exit.js",
+        "node_modules/temp/no_cleanup_on_exit.spec.js",
+        "node_modules/temp/node_modules/rimraf/bin.js",
+        "node_modules/temp/node_modules/rimraf/rimraf.js",
+        "node_modules/through/index.js",
+        "node_modules/underscore/underscore-min.js",
+        "node_modules/underscore/underscore.js",
+        "node_modules/underscore-plus/lib/underscore-plus.js",
+        "node_modules/wrappy/wrappy.js"
+      ],
+      ".json": [
+        "node_modules/async/component.json",
+        "node_modules/async/package.json",
+        "node_modules/atom-package-deps/.eslintrc.json",
+        "node_modules/atom-package-deps/package.json",
+        "node_modules/atom-package-path/package.json",
+        "node_modules/atom-select-list/package-lock.json",
+        "node_modules/atom-select-list/package.json",
+        "node_modules/balanced-match/package.json",
+        "node_modules/brace-expansion/package.json",
+        "node_modules/concat-map/package.json",
+        "node_modules/ctags/package.json",
+        "node_modules/deepmerge/package.json",
+        "node_modules/duplexer/package.json",
+        "node_modules/etch/package.json",
+        "node_modules/event-stream/package.json",
+        "node_modules/find-babel-config/package.json",
+        "node_modules/from/package.json",
+        "node_modules/fs-plus/node_modules/async/package.json",
+        "node_modules/fs-plus/package.json",
+        "node_modules/fs.realpath/package.json",
+        "node_modules/fuzzaldrin/package.json",
+        "node_modules/glob/package.json",
+        "node_modules/humanize-plus/bower.json",
+        "node_modules/humanize-plus/package.json",
+        "node_modules/inflight/package.json",
+        "node_modules/inherits/package.json",
+        "node_modules/is-utf8/package.json",
+        "node_modules/json5/package.json",
+        "node_modules/map-stream/package.json",
+        "node_modules/minimatch/package.json",
+        "node_modules/minimist/package.json",
+        "node_modules/mkdirp/package.json",
+        "node_modules/nan/package.json",
+        "node_modules/nan/tools/package.json",
+        "node_modules/once/package.json",
+        "node_modules/os-tmpdir/package.json",
+        "node_modules/path-exists/package.json",
+        "node_modules/path-is-absolute/package.json",
+        "node_modules/pause-stream/package.json",
+        "node_modules/rimraf/package.json",
+        "node_modules/sb-callsite/package.json",
+        "node_modules/sb-fs/package.json",
+        "node_modules/sb-promisify/package.json",
+        "node_modules/semver/package.json",
+        "node_modules/split/package.json",
+        "node_modules/stream-combiner/package.json",
+        "node_modules/strip-bom-buf/package.json",
+        "node_modules/symbols-view/package.json",
+        "node_modules/temp/node_modules/rimraf/package.json",
+        "node_modules/temp/package.json",
+        "node_modules/through/package.json",
+        "node_modules/underscore/package.json",
+        "node_modules/underscore-plus/package.json",
+        "node_modules/wrappy/package.json",
+        "package.json"
+      ],
+      ".node": [
+        "node_modules/ctags/build/Release/ctags.node"
+      ]
+    },
+    "folders": [
+      {
+        "paths": [
+          "lib",
+          "lib/utils",
+          ""
+        ],
+        "dependencies": {
+          "atom-package-deps": "^4.6.0",
+          "deepmerge": "^1.3.2",
+          "find-babel-config": "^1.0.1"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/atom-package-deps",
+          "node_modules/atom-package-deps/lib"
+        ],
+        "dependencies": {
+          "atom-package-path": "^1.1.0",
+          "sb-fs": "^3.0.0",
+          "semver": "^5.3.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/atom-package-path/lib",
+          "node_modules/atom-package-path",
+          "node_modules/atom-package-path/spec"
+        ],
+        "dependencies": {
+          "sb-callsite": "^1.1.2"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/atom-select-list",
+          "node_modules/atom-select-list/src",
+          "node_modules/atom-select-list/test"
+        ],
+        "dependencies": {
+          "etch": "^0.12.6",
+          "fuzzaldrin": "^2.1.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/brace-expansion"
+        ],
+        "dependencies": {
+          "balanced-match": "^1.0.0",
+          "concat-map": "0.0.1"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/ctags/build/Release",
+          "node_modules/ctags/lib",
+          "node_modules/ctags"
+        ],
+        "dependencies": {
+          "event-stream": "~3.1.0",
+          "nan": "^2"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/event-stream/examples",
+          "node_modules/event-stream",
+          "node_modules/event-stream/test",
+          "node_modules/event-stream/test/helper"
+        ],
+        "dependencies": {
+          "duplexer": "~0.1.1",
+          "from": "~0",
+          "map-stream": "~0.1.0",
+          "pause-stream": "0.0.11",
+          "split": "0.2",
+          "stream-combiner": "~0.0.4",
+          "through": "~2.3.1"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/find-babel-config/lib",
+          "node_modules/find-babel-config"
+        ],
+        "dependencies": {
+          "json5": "^0.5.1",
+          "path-exists": "^3.0.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/fs-plus/lib",
+          "node_modules/fs-plus"
+        ],
+        "dependencies": {
+          "async": "^1.5.2",
+          "mkdirp": "^0.5.1",
+          "rimraf": "^2.5.2",
+          "underscore-plus": "1.x"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/glob"
+        ],
+        "dependencies": {
+          "fs.realpath": "^1.0.0",
+          "inflight": "^1.0.4",
+          "inherits": "2",
+          "minimatch": "^3.0.4",
+          "once": "^1.3.0",
+          "path-is-absolute": "^1.0.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/inflight"
+        ],
+        "dependencies": {
+          "once": "^1.3.0",
+          "wrappy": "1"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/minimatch"
+        ],
+        "dependencies": {
+          "brace-expansion": "^1.1.7"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/mkdirp/bin",
+          "node_modules/mkdirp/examples",
+          "node_modules/mkdirp",
+          "node_modules/mkdirp/test"
+        ],
+        "dependencies": {
+          "minimist": "0.0.8"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/once"
+        ],
+        "dependencies": {
+          "wrappy": "1"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/pause-stream",
+          "node_modules/pause-stream/test"
+        ],
+        "dependencies": {
+          "through": "~2.3"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/rimraf"
+        ],
+        "dependencies": {
+          "glob": "^7.0.5"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/sb-fs/lib",
+          "node_modules/sb-fs"
+        ],
+        "dependencies": {
+          "sb-promisify": "^2.0.1",
+          "strip-bom-buf": "^1.0.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/split/examples",
+          "node_modules/split",
+          "node_modules/split/test"
+        ],
+        "dependencies": {
+          "through": "2"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/stream-combiner",
+          "node_modules/stream-combiner/test"
+        ],
+        "dependencies": {
+          "duplexer": "~0.1.1"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/strip-bom-buf"
+        ],
+        "dependencies": {
+          "is-utf8": "^0.2.1"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/symbols-view",
+          "node_modules/symbols-view/lib",
+          "node_modules/symbols-view/spec",
+          "node_modules/symbols-view/spec/fixtures/js"
+        ],
+        "dependencies": {
+          "async": "^0.2.6",
+          "atom-select-list": "^0.7.0",
+          "ctags": "^3.0.0",
+          "fs-plus": "^3.0.0",
+          "fuzzaldrin": "^2.1.0",
+          "humanize-plus": "^1.8.2",
+          "temp": "^0.8.3",
+          "underscore-plus": "^1.6.6"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/temp/examples",
+          "node_modules/temp/lib",
+          "node_modules/temp",
+          "node_modules/temp/test"
+        ],
+        "dependencies": {
+          "os-tmpdir": "^1.0.0",
+          "rimraf": "~2.2.6"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/underscore-plus/lib",
+          "node_modules/underscore-plus"
+        ],
+        "dependencies": {
+          "underscore": "~1.6.0"
+        }
+      }
+    ]
+  }
+}
